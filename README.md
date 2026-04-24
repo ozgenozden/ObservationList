@@ -1,45 +1,45 @@
 # ObservationList
 
-ObservationList, nursing home housekeeping ekiplerinin gunluk observation checklist kagitlarini dijital ortama tasimak icin hazirlanan Expo ve React Native tabanli mobil uygulamadir.
+ObservationList is an Expo and React Native mobile app for digitising the daily housekeeping observation checklist used at The Marlay Nursing Home.
 
-Uygulama; kagittaki Area, Month, Date, Room No/Area, Observation ve Signature alanlarini dijital kayda cevirir. Yoneticinin tum katlardaki acik, acil veya takip gereken konulara uygulama uzerinden hizli ulasmasi hedeflenir.
+The app turns the paper form fields, such as Area, Month, Date, Room No/Area, Observation, and Signature, into digital records. Managers can quickly review open, urgent, completed, and follow-up items across all housekeeping areas.
 
-## Mimari
+## Architecture
 
-Kod yapisi SOLID prensiplerine uygun gelisebilmesi icin katmanlara ayrildi:
+The codebase is split into layers so the app can grow according to SOLID principles:
 
-- `domain`: Observation modeli ve repository interface sozlesmeleri.
-- `application`: Is akisini yoneten use-case siniflari.
-- `infrastructure`: API, database veya lokal veri gibi somut veri kaynaklari.
-- `presentation`: Ekran, component ve view model yapilari.
-- `app`: Bagimliliklarin tek noktada birbirine baglandigi alan.
+- `domain`: Observation model and repository interface contracts.
+- `application`: Use-case classes that manage business workflows.
+- `infrastructure`: Concrete data sources such as local data, APIs, or databases.
+- `presentation`: Screens, components, and view models.
+- `app`: The composition root where dependencies are wired together.
 
-Bu ayrim sayesinde ileride yeni veri kaynagi veya yeni ekran eklenirken ana yapi bozulmadan yeni implementasyonlar eklenebilir.
+With this structure, future data sources or screens can be added without changing the core application flow.
 
-## Baslangic
+## Getting started
 
-Bagimliliklari kurun:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Gelistirme sunucusunu baslatin:
+Start the development server:
 
 ```bash
 npm start
 ```
 
-Android emulatorde calistirmak icin:
+Run on Android:
 
 ```bash
 npm run android
 ```
 
-iOS simulatorde calistirmak icin:
+Run on iOS:
 
 ```bash
 npm run ios
 ```
 
-> iOS simulator destegi macOS gerektirir.
+> iOS simulator support requires macOS.

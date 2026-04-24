@@ -5,7 +5,7 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
   {
     id: '1',
     roomNumber: '214',
-    floor: '2. Kat',
+    floor: '2nd Floor',
     area: 'East Wing',
     reportedBy: 'Maria L.',
     signature: 'Maria L.',
@@ -13,15 +13,15 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
     priority: 'high',
     status: 'open',
     description:
-      'Komodin cekmecesi kirik. Resident kullanirken zorlandigi icin bakim ekibine bildirilmesi gerekiyor.',
+      'Bedside cabinet drawer is broken. The resident is having difficulty using it, so maintenance should be notified.',
     meetingNote:
-      'Housekeeping toplantisinda yonetici onayiyla maintenance talebi acilacak.',
+      'Create a maintenance request after manager review in the housekeeping meeting.',
     reportedAt: new Date('2026-04-24T08:30:00.000Z'),
   },
   {
     id: '2',
     roomNumber: '108',
-    floor: '1. Kat',
+    floor: '1st Floor',
     area: 'Memory Care',
     reportedBy: 'John K.',
     signature: 'John K.',
@@ -29,15 +29,15 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
     priority: 'normal',
     status: 'followUpNeeded',
     description:
-      'Deep cleaning basladi fakat banyo dolabi bitmedi. Yarin calisacak ekip once buradan devam etmeli.',
+      'Deep cleaning was started, but the bathroom cabinet was not completed. Tomorrow shift should continue here first.',
     meetingNote:
-      'Eksik kalan alan sabah vardiyasina oncelikli is olarak aktarilacak.',
+      'Pass the unfinished area to the morning shift as a priority follow-up.',
     reportedAt: new Date('2026-04-24T14:10:00.000Z'),
   },
   {
     id: '3',
     roomNumber: '305',
-    floor: '3. Kat',
+    floor: '3rd Floor',
     area: 'West Wing',
     reportedBy: 'Aylin S.',
     signature: 'Aylin S.',
@@ -45,15 +45,15 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
     priority: 'low',
     status: 'completed',
     description:
-      'Oda dolap ici yeniden duzenlendi ve eksik havlu tamamlandi.',
+      'Room wardrobe was reorganised and missing towels were replaced.',
     meetingNote:
-      'Tamamlandi olarak kaydedildi; toplantida yalnizca bilgi amacli paylasilacak.',
+      'Marked as completed; share in the meeting for information only.',
     reportedAt: new Date('2026-04-24T16:45:00.000Z'),
   },
 ];
 
 export class InMemoryObservationRepository implements ObservationRepository {
-  // Simdilik lokal veri kullanir; API veya veritabani icin ayni interface uygulanir.
+  // Keeps starter data local; API or database repositories can implement the same interface later.
   async list(): Promise<Observation[]> {
     return [...SAMPLE_OBSERVATIONS];
   }

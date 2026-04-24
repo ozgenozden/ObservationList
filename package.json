@@ -1,7 +1,7 @@
 {
   "name": "observation-list",
   "version": "1.0.0",
-  "description": "ObservationList, Android ve iOS cihazlarda calisacak sekilde Expo ve React Native ile hazirlanan bir mobil uygulamadir.",
+  "description": "ObservationList is an Expo React Native mobile app for digitising housekeeping observation checklists.",
   "main": "index.ts",
   "private": true,
   "scripts": {

@@ -1,6 +1,6 @@
 import type { Observation } from '../entities/Observation';
 
-// Veri kaynagi degisse bile uygulama kurallari bu sozlesmeye bagli kalir.
+// Application rules depend on this contract even when the data source changes.
 export interface ObservationRepository {
   list(): Promise<Observation[]>;
 }

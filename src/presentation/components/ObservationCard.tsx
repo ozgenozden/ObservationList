@@ -6,15 +6,15 @@ type ObservationCardProps = {
   observation: Observation;
 };
 
-// Tek bir gozlem kartini cizer; liste ekrani kart detaylarini bilmek zorunda kalmaz.
+// Renders a single observation card so the list screen stays focused on layout.
 export function ObservationCard({ observation }: ObservationCardProps) {
-  const reportedAtLabel = observation.reportedAt.toLocaleDateString('tr-TR');
+  const reportedAtLabel = observation.reportedAt.toLocaleDateString('en-IE');
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.room}>Oda {observation.roomNumber}</Text>
+          <Text style={styles.room}>Room {observation.roomNumber}</Text>
           <Text style={styles.floor}>
             {observation.area} - {reportedAtLabel}
           </Text>
@@ -28,15 +28,15 @@ export function ObservationCard({ observation }: ObservationCardProps) {
       <Text style={styles.description}>{observation.description}</Text>
 
       <View style={styles.metaGrid}>
-        <MetaItem label="Durum" value={statusLabels[observation.status]} />
-        <MetaItem label="Imza" value={observation.signature} />
+        <MetaItem label="Status" value={statusLabels[observation.status]} />
+        <MetaItem label="Signature" value={observation.signature} />
       </View>
 
-      <Text style={styles.reportedBy}>Kaydi yazan: {observation.reportedBy}</Text>
+      <Text style={styles.reportedBy}>Reported by: {observation.reportedBy}</Text>
 
       {observation.meetingNote ? (
         <View style={styles.meetingNote}>
-          <Text style={styles.meetingLabel}>Toplanti notu</Text>
+          <Text style={styles.meetingLabel}>Meeting note</Text>
           <Text style={styles.meetingText}>{observation.meetingNote}</Text>
         </View>
       ) : null}
@@ -58,29 +58,29 @@ function MetaItem({ label, value }: MetaItemProps) {
   );
 }
 
-// UI metinleri burada tutulur; domain degerleri ekranda dogrudan gosterilmez.
+// UI copy is mapped here so domain values are not shown directly.
 const statusLabels: Record<Observation['status'], string> = {
-  open: 'Acik',
-  inProgress: 'Devam ediyor',
-  completed: 'Tamamlandi',
-  followUpNeeded: 'Takip gerekli',
+  open: 'Open',
+  inProgress: 'In progress',
+  completed: 'Completed',
+  followUpNeeded: 'Follow-up needed',
 };
 
 const priorityLabels: Record<Observation['priority'], string> = {
-  low: 'Dusuk',
+  low: 'Low',
   normal: 'Normal',
-  high: 'Onemli',
-  urgent: 'Acil',
+  high: 'Important',
+  urgent: 'Urgent',
 };
 
 const categoryLabels: Record<Observation['category'], string> = {
-  maintenance: 'Bakim / kirik esya',
-  cleaning: 'Temizlik',
+  maintenance: 'Maintenance / broken item',
+  cleaning: 'Cleaning',
   deepCleaning: 'Deep cleaning',
-  safety: 'Guvenlik',
-  roomUpdate: 'Oda duzeni',
-  supplies: 'Eksik malzeme',
-  note: 'Genel not',
+  safety: 'Safety',
+  roomUpdate: 'Room update',
+  supplies: 'Missing supplies',
+  note: 'General note',
 };
 
 const priorityStyles: Record<Observation['priority'], object> = {

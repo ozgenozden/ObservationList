@@ -8,7 +8,7 @@ export type AppDependencies = {
 };
 
 export function createAppDependencies(): AppDependencies {
-  // Composition root: somut siniflar yalnizca burada birbirine baglanir.
+  // Composition root: concrete classes are connected in one controlled place.
   const observationRepository: ObservationRepository = new InMemoryObservationRepository();
   const listObservationsUseCase = new DefaultListObservationsUseCase(observationRepository);
 

@@ -18,15 +18,15 @@ type ObservationListScreenProps = {
   readonly viewModel: ObservationListViewModel;
 };
 
-// Ekran yalnizca UI akisindan sorumludur; veri kurallarini ViewModel'e devreder.
+// The screen handles only UI flow and delegates data rules to the ViewModel.
 export function ObservationListScreen({ viewModel }: ObservationListScreenProps) {
   const [state, setState] = useState<ObservationListViewState>({
     title: 'ObservationList',
-    subtitle: 'Housekeeping gunluk takip listesi',
-    summary: 'Bugun icin kayit bekleniyor.',
+    subtitle: 'Daily housekeeping follow-up list',
+    summary: 'No observations have been recorded for today yet.',
     facilityName: 'The Marlay',
-    areaLabel: 'Tum katlar',
-    monthLabel: 'Ocak 2026',
+    areaLabel: 'All floors',
+    monthLabel: 'January 2026',
     dashboard: {
       total: 0,
       open: 0,
@@ -65,10 +65,10 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
           </View>
           <Text style={styles.description}>{state.summary}</Text>
           <View style={styles.dashboard}>
-            <DashboardItem label="Toplam" value={state.dashboard.total} />
-            <DashboardItem label="Acik" value={state.dashboard.open} />
-            <DashboardItem label="Acil" value={state.dashboard.urgent} />
-            <DashboardItem label="Biten" value={state.dashboard.completed} />
+            <DashboardItem label="Total" value={state.dashboard.total} />
+            <DashboardItem label="Open" value={state.dashboard.open} />
+            <DashboardItem label="Urgent" value={state.dashboard.urgent} />
+            <DashboardItem label="Done" value={state.dashboard.completed} />
           </View>
         </View>
 

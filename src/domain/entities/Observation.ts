@@ -9,7 +9,7 @@ export type ObservationCategory =
   | 'supplies'
   | 'note';
 
-// Domain entity: housekeeping observation kagidindaki ana alanlari temsil eder.
+// Domain entity that mirrors the main fields from the paper observation checklist.
 export interface Observation {
   id: string;
   roomNumber: string;

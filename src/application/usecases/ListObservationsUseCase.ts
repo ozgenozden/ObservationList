@@ -1,12 +1,12 @@
 import type { Observation } from '../../domain/entities/Observation';
 import type { ObservationRepository } from '../../domain/repositories/ObservationRepository';
 
-// Use case, ekranlarin veri kaynagi detaylarini bilmeden is kurallarini calistirmasini saglar.
+// Use cases let screens run business flows without knowing the data source details.
 export interface ListObservationsUseCase {
   execute(): Promise<Observation[]>;
 }
 
-// Bu sinif yalnizca gozlem listeleme senaryosundan sorumludur.
+// This class is responsible only for the observation listing scenario.
 export class DefaultListObservationsUseCase implements ListObservationsUseCase {
   constructor(private readonly observationRepository: ObservationRepository) {}
 

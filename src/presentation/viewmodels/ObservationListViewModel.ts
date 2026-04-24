@@ -20,7 +20,7 @@ export type ObservationListViewState = {
   isLoading: boolean;
 };
 
-// Ekranin ihtiyac duydugu veriyi hazirlar; UI veri kaynaginin detaylarini bilmez.
+// Prepares screen state so the UI does not know any data-source details.
 export class ObservationListViewModel {
   constructor(private readonly listObservationsUseCase: ListObservationsUseCase) {}
 
@@ -30,11 +30,11 @@ export class ObservationListViewModel {
 
     return {
       title: 'Housekeeping Observation List',
-      subtitle: 'Gunluk oda, kat ve problem takip listesi',
+      subtitle: 'Daily room, area, and issue tracking list',
       summary:
-        'Yoneticiler tum katlardaki acik konulari uygulamadan takip eder; uygun maddeler toplantida detayli konusulur.',
+        'Managers can review open issues from every floor in the app and discuss approved items during the housekeeping meeting.',
       facilityName: 'The Marlay',
-      areaLabel: `${uniqueFloors.size} aktif kat`,
+      areaLabel: `${uniqueFloors.size} active floors`,
       monthLabel: 'January 2026',
       dashboard: {
         total: observations.length,

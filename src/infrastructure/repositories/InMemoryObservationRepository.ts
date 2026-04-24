@@ -1,4 +1,8 @@
-import type { Observation } from '../../domain/entities/Observation';
+import type {
+  Observation,
+  ObservationStatus,
+} from '../../domain/entities/Observation';
+import type { ObservationFilter } from '../../domain/entities/ObservationFilter';
 import type { ObservationRepository } from '../../domain/repositories/ObservationRepository';
 
 const SAMPLE_OBSERVATIONS: Observation[] = [
@@ -57,11 +61,43 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
 
 export class InMemoryObservationRepository implements ObservationRepository {
   // Keeps starter data local; API or database repositories can implement the same interface later.
-  async list(): Promise<Observation[]> {
-    return [...SAMPLE_OBSERVATIONS];
+  async list(filter: ObservationFilter = {}): Promise<Observation[]> {
+    return SAMPLE_OBSERVATIONS.filter((observation) => matchesFilter(observation, filter));
   }
 
   async listByArea(areaId: string): Promise<Observation[]> {
     return SAMPLE_OBSERVATIONS.filter((observation) => observation.areaId === areaId);
   }
+
+  async findById(observationId: string): Promise<Observation | undefined> {
+    return SAMPLE_OBSERVATIONS.find((observation) => observation.id === observationId);
+  }
+
+  async updateStatus(observationId: string, status: ObservationStatus): Promise<Observation> {
+    const observationIndex = SAMPLE_OBSERVATIONS.findIndex(
+      (observation) => observation.id === observationId,
+    );
+
+    if (observationIndex === -1) {
+      throw new Error('Observation not found.');
+    }
+
+    const updatedObservation = {
+      ...SAMPLE_OBSERVATIONS[observationIndex],
+      status,
+    };
+    SAMPLE_OBSERVATIONS[observationIndex] = updatedObservation;
+
+    return updatedObservation;
+  }
+}
+
+function matchesFilter(observation: Observation, filter: ObservationFilter): boolean {
+  const matchesArea = filter.areaId ? observation.areaId === filter.areaId : true;
+  const matchesStatus = filter.status ? observation.status === filter.status : true;
+  const matchesDate = filter.date
+    ? observation.reportedAt.toDateString() === filter.date.toDateString()
+    : true;
+
+  return matchesArea && matchesStatus && matchesDate;
 }

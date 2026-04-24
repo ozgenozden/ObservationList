@@ -4,6 +4,8 @@ ObservationList is an Expo and React Native mobile app for digitising the daily 
 
 The app turns the paper form fields, such as Area, Month, Date, Room No/Area, Observation, and Signature, into digital records. Managers can quickly review open, urgent, completed, and follow-up items across all housekeeping areas.
 
+The starter workflow also separates manager and housekeeping permissions. A manager can see every area, apply date/area/status filters, and change observation status. A housekeeping user sees only the area assigned for that day and can add or update observations only inside that assigned area.
+
 ## Marlay housekeeping areas
 
 The starter data models the eight daily housekeeping areas used across the home:

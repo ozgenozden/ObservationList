@@ -25,6 +25,9 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
     subtitle: 'Daily housekeeping follow-up list',
     summary: 'No observations have been recorded for today yet.',
     facilityName: 'The Marlay',
+    userName: 'Loading user',
+    roleLabel: 'Loading role',
+    permissionNote: 'Loading permissions.',
     areaLabel: 'All floors',
     monthLabel: 'January 2026',
     dashboard: {
@@ -33,6 +36,15 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
       urgent: 0,
       completed: 0,
       areas: 0,
+    },
+    permissions: {
+      roleLabel: 'Loading role',
+      accessLabel: 'Loading permissions',
+      canSeeAllAreas: false,
+      canFilter: false,
+      canAddObservation: false,
+      canUpdateStatus: false,
+      statusOptions: [],
     },
     areaCoverage: [],
     observations: [],
@@ -61,6 +73,11 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
           <Text style={styles.facility}>{state.facilityName}</Text>
           <Text style={styles.title}>{state.title}</Text>
           <Text style={styles.subtitle}>{state.subtitle}</Text>
+          <View style={styles.sessionCard}>
+            <Text style={styles.sessionName}>{state.userName}</Text>
+            <Text style={styles.sessionRole}>{state.roleLabel}</Text>
+            <Text style={styles.sessionNote}>{state.permissionNote}</Text>
+          </View>
           <View style={styles.formMeta}>
             <Text style={styles.formMetaText}>Area: {state.areaLabel}</Text>
             <Text style={styles.formMetaText}>Month: {state.monthLabel}</Text>
@@ -203,6 +220,31 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 26,
     marginBottom: 8,
+  },
+  sessionCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 14,
+    marginBottom: 14,
+    padding: 14,
+  },
+  sessionName: {
+    color: '#0f172a',
+    fontSize: 16,
+    fontWeight: '900',
+  },
+  sessionRole: {
+    color: '#2563eb',
+    fontSize: 13,
+    fontWeight: '800',
+    marginTop: 4,
+    textTransform: 'uppercase',
+  },
+  sessionNote: {
+    color: '#475569',
+    fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 19,
+    marginTop: 8,
   },
   areaSection: {
     marginBottom: 24,

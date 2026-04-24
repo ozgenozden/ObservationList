@@ -1,13 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import type { Observation } from '../../domain/entities/Observation';
+import type { Observation, ObservationStatus } from '../../domain/entities/Observation';
 
 type ObservationCardProps = {
   observation: Observation;
+  readonly canUpdateStatus?: boolean;
+  readonly onStatusChange?: (observationId: string, status: ObservationStatus) => void;
+  readonly statusOptions?: ObservationStatus[];
 };
 
 // Renders a single observation card so the list screen stays focused on layout.
-export function ObservationCard({ observation }: ObservationCardProps) {
+export function ObservationCard({
+  observation,
+  canUpdateStatus = false,
+  onStatusChange,
+  statusOptions = statusActionOptions,
+}: ObservationCardProps) {
   const reportedAtLabel = observation.reportedAt.toLocaleDateString('en-IE');
 
   return (
@@ -38,6 +46,24 @@ export function ObservationCard({ observation }: ObservationCardProps) {
         <View style={styles.meetingNote}>
           <Text style={styles.meetingLabel}>Meeting note</Text>
           <Text style={styles.meetingText}>{observation.meetingNote}</Text>
+        </View>
+      ) : null}
+
+      {canUpdateStatus ? (
+        <View style={styles.statusActions}>
+          <Text style={styles.statusActionsTitle}>Change status</Text>
+          {statusOptions.map((status) => (
+            <Pressable
+              key={status}
+              onPress={() => onStatusChange?.(observation.id, status)}
+              style={[
+                styles.statusButton,
+                observation.status === status ? styles.statusButtonActive : null,
+              ]}
+            >
+              <Text style={styles.statusButtonText}>{statusLabels[status]}</Text>
+            </Pressable>
+          ))}
         </View>
       ) : null}
     </View>
@@ -89,6 +115,13 @@ const priorityStyles: Record<Observation['priority'], object> = {
   high: { backgroundColor: '#fef3c7' },
   urgent: { backgroundColor: '#fee2e2' },
 };
+
+const statusActionOptions: ObservationStatus[] = [
+  'open',
+  'inProgress',
+  'followUpNeeded',
+  'completed',
+];
 
 const styles = StyleSheet.create({
   card: {
@@ -186,5 +219,34 @@ const styles = StyleSheet.create({
     color: '#713f12',
     fontSize: 14,
     lineHeight: 20,
+  },
+  statusActions: {
+    borderTopColor: '#e2e8f0',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 12,
+    paddingTop: 12,
+  },
+  statusActionsTitle: {
+    color: '#475569',
+    fontSize: 12,
+    fontWeight: '800',
+    width: '100%',
+  },
+  statusButton: {
+    backgroundColor: '#eff6ff',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  statusButtonActive: {
+    backgroundColor: '#bfdbfe',
+  },
+  statusButtonText: {
+    color: '#1e3a8a',
+    fontSize: 12,
+    fontWeight: '800',
   },
 });

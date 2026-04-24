@@ -4,6 +4,8 @@ import { ListHousekeepingAreasUseCase } from '../../application/usecases/ListHou
 import { GetCurrentUserSessionUseCase } from '../../application/usecases/GetCurrentUserSessionUseCase';
 import { ListVisibleObservationsUseCase } from '../../application/usecases/ListVisibleObservationsUseCase';
 import { ObservationStatus } from '../../domain/entities/Observation';
+import { ObservationFilter } from '../../domain/entities/ObservationFilter';
+import { UserRole, UserSession } from '../../domain/entities/User';
 import { UpdateObservationStatusUseCase } from '../../application/usecases/UpdateObservationStatusUseCase';
 
 export type ObservationListSummary = {
@@ -49,6 +51,11 @@ export type ObservationListViewState = {
   isLoading: boolean;
 };
 
+export type ObservationListLoadOptions = {
+  role?: UserRole;
+  filter?: ObservationFilter;
+};
+
 // Prepares screen state so the UI does not know any data-source details.
 export class ObservationListViewModel {
   constructor(
@@ -58,10 +65,10 @@ export class ObservationListViewModel {
     private readonly updateObservationStatusUseCase: UpdateObservationStatusUseCase,
   ) {}
 
-  async load(): Promise<ObservationListViewState> {
-    const session = await this.getCurrentUserSessionUseCase.execute();
+  async load(options: ObservationListLoadOptions = {}): Promise<ObservationListViewState> {
+    const session = await this.createSession(options.role);
     const [observations, areas] = await Promise.all([
-      this.listVisibleObservationsUseCase.execute(session),
+      this.listVisibleObservationsUseCase.execute(session, options.filter),
       this.listHousekeepingAreasUseCase.execute(),
     ]);
     const visibleAreas = this.filterVisibleAreas(areas, observations, session.user.role);
@@ -93,13 +100,40 @@ export class ObservationListViewModel {
   async previewStatusUpdate(
     observationId: string,
     nextStatus: ObservationStatus,
+    role?: UserRole,
   ): Promise<Observation> {
-    const session = await this.getCurrentUserSessionUseCase.execute();
+    const session = await this.createSession(role);
 
     return this.updateObservationStatusUseCase.execute(session, observationId, nextStatus);
   }
 
-  private createSummary(role: 'manager' | 'housekeeper'): string {
+  private async createSession(role?: UserRole): Promise<UserSession> {
+    const currentSession = await this.getCurrentUserSessionUseCase.execute();
+
+    if (!role || role === currentSession.user.role) {
+      return currentSession;
+    }
+
+    // Demo role switching makes manager/housekeeper behaviour visible until real login exists.
+    return {
+      user: role === 'manager'
+        ? {
+            id: 'manager-1',
+            username: 'manager',
+            displayName: 'Housekeeping Manager',
+            role: 'manager',
+          }
+        : {
+            id: 'hk-john',
+            username: 'john',
+            displayName: 'John K.',
+            role: 'housekeeper',
+          },
+      signedInAt: currentSession.signedInAt,
+    };
+  }
+
+  private createSummary(role: UserRole): string {
     if (role === 'manager') {
       return 'Managers can review every area, filter by date, area, or status, add observations, and close issues when they are resolved.';
     }
@@ -107,11 +141,11 @@ export class ObservationListViewModel {
     return 'Housekeeping staff see only the area assigned for today. They can add observations and update status for their assigned area.';
   }
 
-  private createRoleLabel(role: 'manager' | 'housekeeper'): string {
+  private createRoleLabel(role: UserRole): string {
     return role === 'manager' ? 'Manager view' : 'Housekeeper view';
   }
 
-  private createPermissionNote(role: 'manager' | 'housekeeper', areas: HousekeepingArea[]): string {
+  private createPermissionNote(role: UserRole, areas: HousekeepingArea[]): string {
     if (role === 'manager') {
       return 'Full access: all areas, filters, new observations, and status updates.';
     }
@@ -120,7 +154,7 @@ export class ObservationListViewModel {
     return `Restricted access: today you can work only in ${areaName}.`;
   }
 
-  private createAreaLabel(role: 'manager' | 'housekeeper', areas: HousekeepingArea[]): string {
+  private createAreaLabel(role: UserRole, areas: HousekeepingArea[]): string {
     if (role === 'manager') {
       return `${areas.length} housekeeping areas`;
     }
@@ -128,7 +162,7 @@ export class ObservationListViewModel {
     return areas[0]?.name ?? 'No area assigned';
   }
 
-  private createPermissions(role: 'manager' | 'housekeeper'): RolePermissionSummary {
+  private createPermissions(role: UserRole): RolePermissionSummary {
     const canSeeAllAreas = role === 'manager';
 
     return {
@@ -147,7 +181,7 @@ export class ObservationListViewModel {
   private filterVisibleAreas(
     areas: HousekeepingArea[],
     observations: Observation[],
-    role: 'manager' | 'housekeeper',
+    role: UserRole,
   ): HousekeepingArea[] {
     if (role === 'manager') {
       return areas;

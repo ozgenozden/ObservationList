@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +9,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import type { ObservationStatus } from '../../domain/entities/Observation';
+import type { ObservationFilter } from '../../domain/entities/ObservationFilter';
+import type { UserRole } from '../../domain/entities/User';
 import { ObservationCard } from '../components/ObservationCard';
 import {
   ObservationListViewModel,
@@ -50,11 +54,13 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
     observations: [],
     isLoading: true,
   });
+  const [selectedRole, setSelectedRole] = useState<UserRole>('manager');
+  const [selectedFilter, setSelectedFilter] = useState<ObservationFilter>({});
 
   useEffect(() => {
     let isMounted = true;
 
-    viewModel.load().then((nextState) => {
+    viewModel.load({ filter: selectedFilter, role: selectedRole }).then((nextState) => {
       if (isMounted) {
         setState(nextState);
       }
@@ -63,7 +69,28 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
     return () => {
       isMounted = false;
     };
-  }, [viewModel]);
+  }, [selectedFilter, selectedRole, viewModel]);
+
+  const changeRole = (role: UserRole) => {
+    setSelectedRole(role);
+    setSelectedFilter({});
+  };
+
+  const changeStatus = (status: ObservationStatus) => {
+    setSelectedFilter((currentFilter) => ({
+      ...currentFilter,
+      status: currentFilter.status === status ? undefined : status,
+    }));
+  };
+
+  const updateObservationStatus = async (
+    observationId: string,
+    nextStatus: ObservationStatus,
+  ) => {
+    await viewModel.previewStatusUpdate(observationId, nextStatus, selectedRole);
+    const nextState = await viewModel.load({ filter: selectedFilter, role: selectedRole });
+    setState(nextState);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,11 +105,45 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
             <Text style={styles.sessionRole}>{state.roleLabel}</Text>
             <Text style={styles.sessionNote}>{state.permissionNote}</Text>
           </View>
+          <View style={styles.roleSwitcher}>
+            <RoleButton
+              isActive={selectedRole === 'manager'}
+              label="Manager demo"
+              onPress={() => changeRole('manager')}
+            />
+            <RoleButton
+              isActive={selectedRole === 'housekeeper'}
+              label="Housekeeper demo"
+              onPress={() => changeRole('housekeeper')}
+            />
+          </View>
           <View style={styles.formMeta}>
             <Text style={styles.formMetaText}>Area: {state.areaLabel}</Text>
             <Text style={styles.formMetaText}>Month: {state.monthLabel}</Text>
           </View>
           <Text style={styles.description}>{state.summary}</Text>
+          <View style={styles.actionPanel}>
+            <Text style={styles.panelTitle}>
+              {state.permissions.canFilter ? 'Manager filters' : 'Housekeeper access'}
+            </Text>
+            <Text style={styles.panelText}>
+              {state.permissions.canFilter
+                ? 'Managers can filter by status now; date and area filters are ready in the use-case layer.'
+                : 'Housekeepers can see and update only today\'s assigned area.'}
+            </Text>
+            {state.permissions.canFilter ? (
+              <View style={styles.filterRow}>
+                {state.permissions.statusOptions.map((status) => (
+                  <FilterButton
+                    isActive={selectedFilter.status === status}
+                    key={status}
+                    label={statusLabels[status]}
+                    onPress={() => changeStatus(status)}
+                  />
+                ))}
+              </View>
+            ) : null}
+          </View>
           <View style={styles.dashboard}>
             <DashboardItem label="Total" value={state.dashboard.total} />
             <DashboardItem label="Open" value={state.dashboard.open} />
@@ -113,7 +174,13 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
 
             <View style={styles.list}>
               {state.observations.map((observation) => (
-                <ObservationCard key={observation.id} observation={observation} />
+                <ObservationCard
+                  canUpdateStatus={state.permissions.canUpdateStatus}
+                  key={observation.id}
+                  onStatusChange={updateObservationStatus}
+                  observation={observation}
+                  statusOptions={state.permissions.statusOptions}
+                />
               ))}
             </View>
           </>
@@ -122,6 +189,13 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
     </SafeAreaView>
   );
 }
+
+const statusLabels: Record<ObservationStatus, string> = {
+  open: 'Open',
+  inProgress: 'In progress',
+  completed: 'Completed',
+  followUpNeeded: 'Follow-up needed',
+};
 
 type DashboardItemProps = {
   readonly label: string;
@@ -134,6 +208,46 @@ function DashboardItem({ label, value }: DashboardItemProps) {
       <Text style={styles.dashboardValue}>{value}</Text>
       <Text style={styles.dashboardLabel}>{label}</Text>
     </View>
+  );
+}
+
+type RoleButtonProps = {
+  readonly isActive: boolean;
+  readonly label: string;
+  readonly onPress: () => void;
+};
+
+function RoleButton({ isActive, label, onPress }: RoleButtonProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[styles.roleButton, isActive ? styles.activeRoleButton : undefined]}
+    >
+      <Text style={[styles.roleButtonText, isActive ? styles.activeRoleButtonText : undefined]}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
+type FilterButtonProps = {
+  readonly isActive: boolean;
+  readonly label: string;
+  readonly onPress: () => void;
+};
+
+function FilterButton({ isActive, label, onPress }: FilterButtonProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[styles.filterButton, isActive ? styles.activeFilterButton : undefined]}
+    >
+      <Text
+        style={[styles.filterButtonText, isActive ? styles.activeFilterButtonText : undefined]}
+      >
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -245,6 +359,71 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 19,
     marginTop: 8,
+  },
+  roleSwitcher: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 14,
+  },
+  roleButton: {
+    backgroundColor: '#e2e8f0',
+    borderRadius: 12,
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  activeRoleButton: {
+    backgroundColor: '#2563eb',
+  },
+  roleButtonText: {
+    color: '#334155',
+    fontSize: 13,
+    fontWeight: '900',
+    textAlign: 'center',
+  },
+  activeRoleButtonText: {
+    color: '#ffffff',
+  },
+  actionPanel: {
+    backgroundColor: '#ffffff',
+    borderRadius: 14,
+    marginTop: 14,
+    padding: 14,
+  },
+  panelTitle: {
+    color: '#0f172a',
+    fontSize: 15,
+    fontWeight: '900',
+    marginBottom: 6,
+  },
+  panelText: {
+    color: '#475569',
+    fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 19,
+  },
+  filterRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 12,
+  },
+  filterButton: {
+    backgroundColor: '#f1f5f9',
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  activeFilterButton: {
+    backgroundColor: '#dbeafe',
+  },
+  filterButtonText: {
+    color: '#475569',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  activeFilterButtonText: {
+    color: '#1d4ed8',
   },
   areaSection: {
     marginBottom: 24,

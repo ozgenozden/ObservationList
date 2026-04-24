@@ -5,19 +5,21 @@ export type ObservationListViewState = {
   title: string;
   subtitle: string;
   observations: Observation[];
+  isLoading: boolean;
 };
 
 // Ekranin ihtiyac duydugu veriyi hazirlar; UI veri kaynaginin detaylarini bilmez.
 export class ObservationListViewModel {
   constructor(private readonly listObservationsUseCase: ListObservationsUseCase) {}
 
-  async getInitialState(): Promise<ObservationListViewState> {
+  async load(): Promise<ObservationListViewState> {
     const observations = await this.listObservationsUseCase.execute();
 
     return {
       title: 'ObservationList',
       subtitle: 'Gozlemleri kaydetmek, siniflandirmak ve takip etmek icin hazirlanan mobil uygulama.',
       observations,
+      isLoading: false,
     };
   }
 }

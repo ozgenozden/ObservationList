@@ -11,6 +11,6 @@ export class DefaultListObservationsUseCase implements ListObservationsUseCase {
   constructor(private readonly observationRepository: ObservationRepository) {}
 
   async execute(): Promise<Observation[]> {
-    return this.observationRepository.findAll();
+    return this.observationRepository.list();
   }
 }

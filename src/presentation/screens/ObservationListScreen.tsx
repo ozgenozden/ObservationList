@@ -21,6 +21,8 @@ type ObservationListScreenProps = {
 // Ekran yalnizca UI akisindan sorumludur; veri kurallarini ViewModel'e devreder.
 export function ObservationListScreen({ viewModel }: ObservationListScreenProps) {
   const [state, setState] = useState<ObservationListViewState>({
+    title: 'ObservationList',
+    subtitle: 'Gozlemlerini duzenli takip et',
     observations: [],
     isLoading: true,
   });

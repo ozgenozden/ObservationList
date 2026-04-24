@@ -8,14 +8,25 @@ type ObservationCardProps = {
 
 // Tek bir gozlem kartini cizer; liste ekrani kart detaylarini bilmek zorunda kalmaz.
 export function ObservationCard({ observation }: ObservationCardProps) {
+  const createdAtLabel = observation.createdAt.toLocaleDateString('tr-TR');
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{observation.title}</Text>
       <Text style={styles.description}>{observation.description}</Text>
-      <Text style={styles.date}>{observation.observedAt}</Text>
+      <Text style={styles.date}>
+        {statusLabels[observation.status]} - {createdAtLabel}
+      </Text>
     </View>
   );
 }
+
+// UI metinleri burada tutulur; domain status degerleri ekranda dogrudan gosterilmez.
+const statusLabels: Record<Observation['status'], string> = {
+  planned: 'Planlandi',
+  inProgress: 'Devam ediyor',
+  completed: 'Tamamlandi',
+};
 
 const styles = StyleSheet.create({
   card: {

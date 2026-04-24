@@ -1,4 +1,4 @@
-import { ListObservationsUseCase } from '../application/usecases/ListObservationsUseCase';
+import { DefaultListObservationsUseCase } from '../application/usecases/ListObservationsUseCase';
 import type { ObservationRepository } from '../domain/repositories/ObservationRepository';
 import { InMemoryObservationRepository } from '../infrastructure/repositories/InMemoryObservationRepository';
 import { ObservationListViewModel } from '../presentation/viewmodels/ObservationListViewModel';
@@ -10,7 +10,7 @@ export type AppDependencies = {
 export function createAppDependencies(): AppDependencies {
   // Composition root: somut siniflar yalnizca burada birbirine baglanir.
   const observationRepository: ObservationRepository = new InMemoryObservationRepository();
-  const listObservationsUseCase = new ListObservationsUseCase(observationRepository);
+  const listObservationsUseCase = new DefaultListObservationsUseCase(observationRepository);
 
   return {
     observationListViewModel: new ObservationListViewModel(listObservationsUseCase),

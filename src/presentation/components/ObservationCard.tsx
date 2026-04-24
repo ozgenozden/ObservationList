@@ -8,24 +8,80 @@ type ObservationCardProps = {
 
 // Tek bir gozlem kartini cizer; liste ekrani kart detaylarini bilmek zorunda kalmaz.
 export function ObservationCard({ observation }: ObservationCardProps) {
-  const createdAtLabel = observation.createdAt.toLocaleDateString('tr-TR');
+  const reportedAtLabel = observation.reportedAt.toLocaleDateString('tr-TR');
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{observation.title}</Text>
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.room}>Oda {observation.roomNumber}</Text>
+          <Text style={styles.floor}>{observation.floor} - {reportedAtLabel}</Text>
+        </View>
+        <View style={[styles.badge, priorityStyles[observation.priority]]}>
+          <Text style={styles.badgeText}>{priorityLabels[observation.priority]}</Text>
+        </View>
+      </View>
+
+      <Text style={styles.category}>{categoryLabels[observation.category]}</Text>
       <Text style={styles.description}>{observation.description}</Text>
-      <Text style={styles.date}>
-        {statusLabels[observation.status]} - {createdAtLabel}
-      </Text>
+
+      <View style={styles.metaGrid}>
+        <MetaItem label="Durum" value={statusLabels[observation.status]} />
+        <MetaItem label="Yazan" value={observation.reportedBy} />
+      </View>
+
+      {observation.meetingNote ? (
+        <View style={styles.meetingNote}>
+          <Text style={styles.meetingLabel}>Toplanti notu</Text>
+          <Text style={styles.meetingText}>{observation.meetingNote}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
 
-// UI metinleri burada tutulur; domain status degerleri ekranda dogrudan gosterilmez.
+type MetaItemProps = {
+  readonly label: string;
+  readonly value: string;
+};
+
+function MetaItem({ label, value }: MetaItemProps) {
+  return (
+    <View style={styles.metaItem}>
+      <Text style={styles.metaLabel}>{label}</Text>
+      <Text style={styles.metaValue}>{value}</Text>
+    </View>
+  );
+}
+
+// UI metinleri burada tutulur; domain degerleri ekranda dogrudan gosterilmez.
 const statusLabels: Record<Observation['status'], string> = {
-  planned: 'Planlandi',
-  inProgress: 'Devam ediyor',
+  open: 'Acik',
+  inDiscussion: 'Toplantida',
   completed: 'Tamamlandi',
+  followUpNeeded: 'Takip gerekli',
+};
+
+const priorityLabels: Record<Observation['priority'], string> = {
+  low: 'Dusuk',
+  normal: 'Normal',
+  high: 'Onemli',
+  urgent: 'Acil',
+};
+
+const categoryLabels: Record<Observation['category'], string> = {
+  maintenance: 'Bakim / kirik esya',
+  cleaning: 'Temizlik',
+  deepCleaning: 'Deep cleaning',
+  safety: 'Guvenlik',
+  note: 'Genel not',
+};
+
+const priorityStyles: Record<Observation['priority'], object> = {
+  low: { backgroundColor: '#e0f2fe' },
+  normal: { backgroundColor: '#dcfce7' },
+  high: { backgroundColor: '#fef3c7' },
+  urgent: { backgroundColor: '#fee2e2' },
 };
 
 const styles = StyleSheet.create({
@@ -40,21 +96,83 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 2,
   },
-  title: {
-    color: '#111827',
-    fontSize: 18,
-    fontWeight: '700',
+  header: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 14,
+  },
+  room: {
+    color: '#0f172a',
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  floor: {
+    color: '#64748b',
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  badge: {
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  badgeText: {
+    color: '#0f172a',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  category: {
+    color: '#2563eb',
+    fontSize: 13,
+    fontWeight: '800',
     marginBottom: 8,
+    textTransform: 'uppercase',
   },
   description: {
     color: '#4b5563',
     fontSize: 15,
     lineHeight: 22,
-    marginBottom: 10,
+    marginBottom: 14,
   },
-  date: {
+  metaGrid: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 12,
+  },
+  metaItem: {
+    backgroundColor: '#f8fafc',
+    borderRadius: 12,
+    flex: 1,
+    padding: 12,
+  },
+  metaLabel: {
     color: '#64748b',
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
+  },
+  metaValue: {
+    color: '#0f172a',
+    fontSize: 14,
+    fontWeight: '700',
+    marginTop: 4,
+  },
+  meetingNote: {
+    backgroundColor: '#fefce8',
+    borderRadius: 12,
+    padding: 12,
+  },
+  meetingLabel: {
+    color: '#854d0e',
+    fontSize: 12,
+    fontWeight: '800',
+    marginBottom: 4,
+    textTransform: 'uppercase',
+  },
+  meetingText: {
+    color: '#713f12',
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

@@ -1,10 +1,22 @@
-export type ObservationStatus = 'planned' | 'inProgress' | 'completed';
+export type ObservationStatus = 'open' | 'inReview' | 'completed' | 'partiallyCompleted';
+export type ObservationPriority = 'normal' | 'high' | 'urgent';
+export type ObservationCategory =
+  | 'maintenance'
+  | 'deepCleaning'
+  | 'safety'
+  | 'roomUpdate'
+  | 'supplies';
 
-// Domain entity: uygulamanin is kurallarinda kullanacagi temel gozlem modeli.
+// Domain entity: housekeeping observation kagidindaki ana alanlari temsil eder.
 export interface Observation {
   id: string;
-  title: string;
+  roomNumber: string;
+  floor: string;
+  reportedAt: Date;
+  reportedBy: string;
+  category: ObservationCategory;
   description: string;
+  actionRequired: string;
   status: ObservationStatus;
-  createdAt: Date;
+  priority: ObservationPriority;
 }

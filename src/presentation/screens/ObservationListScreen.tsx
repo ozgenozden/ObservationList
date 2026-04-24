@@ -22,7 +22,8 @@ type ObservationListScreenProps = {
 export function ObservationListScreen({ viewModel }: ObservationListScreenProps) {
   const [state, setState] = useState<ObservationListViewState>({
     title: 'ObservationList',
-    subtitle: 'Gozlemlerini duzenli takip et',
+    subtitle: 'Housekeeping gunluk takip listesi',
+    summary: 'Bugun icin kayit bekleniyor.',
     observations: [],
     isLoading: true,
   });
@@ -45,13 +46,10 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.eyebrow}>ObservationList</Text>
-          <Text style={styles.title}>Gozlemlerini duzenli takip et</Text>
-          <Text style={styles.description}>
-            Bu baslangic mimarisi SOLID prensiplerine gore katmanlara ayrildi.
-            Yeni veri kaynaklari, ekranlar ve is kurallari mevcut ana yapi
-            bozulmadan eklenebilir.
-          </Text>
+          <Text style={styles.eyebrow}>Nursing Home Housekeeping</Text>
+          <Text style={styles.title}>{state.title}</Text>
+          <Text style={styles.subtitle}>{state.subtitle}</Text>
+          <Text style={styles.description}>{state.summary}</Text>
         </View>
 
         {state.isLoading ? (
@@ -100,6 +98,13 @@ const styles = StyleSheet.create({
     color: '#475569',
     fontSize: 16,
     lineHeight: 24,
+  },
+  subtitle: {
+    color: '#1e293b',
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: 26,
+    marginBottom: 8,
   },
   list: {
     gap: 16,

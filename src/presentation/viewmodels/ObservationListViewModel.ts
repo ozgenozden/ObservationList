@@ -4,6 +4,7 @@ import { ListObservationsUseCase } from '../../application/usecases/ListObservat
 export type ObservationListViewState = {
   title: string;
   subtitle: string;
+  meetingNote: string;
   observations: Observation[];
   isLoading: boolean;
 };
@@ -16,8 +17,10 @@ export class ObservationListViewModel {
     const observations = await this.listObservationsUseCase.execute();
 
     return {
-      title: 'ObservationList',
-      subtitle: 'Gozlemleri kaydetmek, siniflandirmak ve takip etmek icin hazirlanan mobil uygulama.',
+      title: 'Housekeeping Observation List',
+      subtitle: 'Gunluk oda, kat ve problem takip listesi',
+      meetingNote:
+        'Bir sonraki housekeeping toplantisinda yonetici tarafindan uygun gorulen maddeler detayli olarak konusulur.',
       observations,
       isLoading: false,
     };

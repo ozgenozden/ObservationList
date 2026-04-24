@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "ObservationList",
+    "slug": "observation-list",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.observationlist.app"
+    },
+    "android": {
+      "package": "com.observationlist.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F172A"
+      }
+    }
+  }
+}

@@ -14,7 +14,7 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
       'Komodin cekmecesi kirik. Resident kullanirken zorlandigi icin bakim ekibine bildirilmesi gerekiyor.',
     meetingNote:
       'Housekeeping toplantisinda yonetici onayiyla maintenance talebi acilacak.',
-    createdAt: new Date('2026-04-24T08:30:00.000Z'),
+    reportedAt: new Date('2026-04-24T08:30:00.000Z'),
   },
   {
     id: '2',
@@ -22,27 +22,27 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
     floor: '1. Kat',
     reportedBy: 'John K.',
     category: 'deepCleaning',
-    priority: 'medium',
-    status: 'inProgress',
+    priority: 'normal',
+    status: 'followUpNeeded',
     description:
       'Deep cleaning basladi fakat banyo dolabi bitmedi. Yarin calisacak ekip once buradan devam etmeli.',
     meetingNote:
       'Eksik kalan alan sabah vardiyasina oncelikli is olarak aktarilacak.',
-    createdAt: new Date('2026-04-24T14:10:00.000Z'),
+    reportedAt: new Date('2026-04-24T14:10:00.000Z'),
   },
   {
     id: '3',
     roomNumber: '305',
     floor: '3. Kat',
     reportedBy: 'Aylin S.',
-    category: 'roomChange',
+    category: 'note',
     priority: 'low',
     status: 'completed',
     description:
       'Oda dolap ici yeniden duzenlendi ve eksik havlu tamamlandi.',
     meetingNote:
       'Tamamlandi olarak kaydedildi; toplantida yalnizca bilgi amacli paylasilacak.',
-    createdAt: new Date('2026-04-24T16:45:00.000Z'),
+    reportedAt: new Date('2026-04-24T16:45:00.000Z'),
   },
 ];
 

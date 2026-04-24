@@ -57,7 +57,7 @@ function MetaItem({ label, value }: MetaItemProps) {
 // UI metinleri burada tutulur; domain degerleri ekranda dogrudan gosterilmez.
 const statusLabels: Record<Observation['status'], string> = {
   open: 'Acik',
-  inDiscussion: 'Toplantida',
+  inProgress: 'Devam ediyor',
   completed: 'Tamamlandi',
   followUpNeeded: 'Takip gerekli',
 };
@@ -74,6 +74,8 @@ const categoryLabels: Record<Observation['category'], string> = {
   cleaning: 'Temizlik',
   deepCleaning: 'Deep cleaning',
   safety: 'Guvenlik',
+  roomUpdate: 'Oda duzeni',
+  supplies: 'Eksik malzeme',
   note: 'Genel not',
 };
 

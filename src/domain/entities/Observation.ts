@@ -1,11 +1,13 @@
-export type ObservationStatus = 'open' | 'inReview' | 'completed' | 'partiallyCompleted';
-export type ObservationPriority = 'normal' | 'high' | 'urgent';
+export type ObservationStatus = 'open' | 'inProgress' | 'completed' | 'followUpNeeded';
+export type ObservationPriority = 'low' | 'normal' | 'high' | 'urgent';
 export type ObservationCategory =
   | 'maintenance'
+  | 'cleaning'
   | 'deepCleaning'
   | 'safety'
   | 'roomUpdate'
-  | 'supplies';
+  | 'supplies'
+  | 'note';
 
 // Domain entity: housekeeping observation kagidindaki ana alanlari temsil eder.
 export interface Observation {
@@ -16,7 +18,7 @@ export interface Observation {
   reportedBy: string;
   category: ObservationCategory;
   description: string;
-  actionRequired: string;
+  meetingNote?: string;
   status: ObservationStatus;
   priority: ObservationPriority;
 }

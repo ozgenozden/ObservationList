@@ -2,20 +2,20 @@ import { Observation } from '../../domain/entities/Observation';
 import { ListObservationsUseCase } from '../../application/usecases/ListObservationsUseCase';
 
 export type ObservationListSummary = {
-  totalCount: number;
-  openCount: number;
-  urgentCount: number;
-  floorCount: number;
+  total: number;
+  open: number;
+  urgent: number;
+  completed: number;
 };
 
 export type ObservationListViewState = {
   title: string;
   subtitle: string;
   summary: string;
-  formArea: string;
-  formMonth: string;
-  supervisorSignature: string;
-  managerSummary: ObservationListSummary;
+  facilityName: string;
+  areaLabel: string;
+  monthLabel: string;
+  dashboard: ObservationListSummary;
   observations: Observation[];
   isLoading: boolean;
 };
@@ -33,14 +33,14 @@ export class ObservationListViewModel {
       subtitle: 'Gunluk oda, kat ve problem takip listesi',
       summary:
         'Yoneticiler tum katlardaki acik konulari uygulamadan takip eder; uygun maddeler toplantida detayli konusulur.',
-      formArea: 'All Housekeeping Floors',
-      formMonth: 'January 2026',
-      supervisorSignature: 'HKM Supervisor',
-      managerSummary: {
-        totalCount: observations.length,
-        openCount: observations.filter((observation) => observation.status !== 'completed').length,
-        urgentCount: observations.filter((observation) => observation.priority === 'urgent').length,
-        floorCount: uniqueFloors.size,
+      facilityName: 'The Marlay',
+      areaLabel: `${uniqueFloors.size} aktif kat`,
+      monthLabel: 'January 2026',
+      dashboard: {
+        total: observations.length,
+        open: observations.filter((observation) => observation.status !== 'completed').length,
+        urgent: observations.filter((observation) => observation.priority === 'urgent').length,
+        completed: observations.filter((observation) => observation.status === 'completed').length,
       },
       observations,
       isLoading: false,

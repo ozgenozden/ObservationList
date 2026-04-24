@@ -1,0 +1,34 @@
+{
+  "name": "observation-list",
+  "version": "1.0.0",
+  "description": "ObservationList, Android ve iOS cihazlarda calisacak sekilde Expo ve React Native ile hazirlanan bir mobil uygulamadir.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozgenozden/ObservationList.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ozgenozden/ObservationList/issues"
+  },
+  "homepage": "https://github.com/ozgenozden/ObservationList#readme",
+  "dependencies": {
+    "expo": "^55.0.17",
+    "react": "^19.2.5",
+    "react-native": "^0.85.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "typescript": "^5.9.3"
+  }
+}

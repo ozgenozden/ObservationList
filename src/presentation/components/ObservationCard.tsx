@@ -15,7 +15,9 @@ export function ObservationCard({ observation }: ObservationCardProps) {
       <View style={styles.header}>
         <View>
           <Text style={styles.room}>Oda {observation.roomNumber}</Text>
-          <Text style={styles.floor}>{observation.floor} - {reportedAtLabel}</Text>
+          <Text style={styles.floor}>
+            {observation.area} - {reportedAtLabel}
+          </Text>
         </View>
         <View style={[styles.badge, priorityStyles[observation.priority]]}>
           <Text style={styles.badgeText}>{priorityLabels[observation.priority]}</Text>
@@ -27,8 +29,10 @@ export function ObservationCard({ observation }: ObservationCardProps) {
 
       <View style={styles.metaGrid}>
         <MetaItem label="Durum" value={statusLabels[observation.status]} />
-        <MetaItem label="Yazan" value={observation.reportedBy} />
+        <MetaItem label="Imza" value={observation.signature} />
       </View>
+
+      <Text style={styles.reportedBy}>Kaydi yazan: {observation.reportedBy}</Text>
 
       {observation.meetingNote ? (
         <View style={styles.meetingNote}>
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
   metaGrid: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   metaItem: {
     backgroundColor: '#f8fafc',
@@ -159,6 +163,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     marginTop: 4,
+  },
+  reportedBy: {
+    color: '#64748b',
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 12,
   },
   meetingNote: {
     backgroundColor: '#fefce8',

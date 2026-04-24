@@ -14,8 +14,10 @@ export interface Observation {
   id: string;
   roomNumber: string;
   floor: string;
+  area: string;
   reportedAt: Date;
   reportedBy: string;
+  signature: string;
   category: ObservationCategory;
   description: string;
   meetingNote?: string;

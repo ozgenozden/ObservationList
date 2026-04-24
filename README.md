@@ -1,8 +1,8 @@
 # ObservationList
 
-ObservationList, nursing home housekeeping ekiplerinin gunluk observation list kagitlarini dijital ortama tasimak icin hazirlanan Expo ve React Native tabanli mobil uygulamadir.
+ObservationList, nursing home housekeeping ekiplerinin gunluk observation checklist kagitlarini dijital ortama tasimak icin hazirlanan Expo ve React Native tabanli mobil uygulamadir.
 
-Uygulama; oda numarasi, kat, tarih, problem aciklamasi, bildirimi yazan kisi, oncelik ve sonraki vardiya notlarini tek listede takip etmeyi hedefler. Housekeeping toplantilarinda yoneticiye aktarilacak konular bu liste uzerinden daha duzenli gorulebilir.
+Uygulama; kagittaki Area, Month, Date, Room No/Area, Observation ve Signature alanlarini dijital kayda cevirir. Yoneticinin tum katlardaki acik, acil veya takip gereken konulara uygulama uzerinden hizli ulasmasi hedeflenir.
 
 ## Mimari
 

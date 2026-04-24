@@ -2,7 +2,7 @@
   "name": "observation-list",
   "version": "1.0.0",
   "description": "ObservationList, Android ve iOS cihazlarda calisacak sekilde Expo ve React Native ile hazirlanan bir mobil uygulamadir.",
-  "main": "index.js",
+  "main": "index.ts",
   "private": true,
   "scripts": {
     "start": "expo start",

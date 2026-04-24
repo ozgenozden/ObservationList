@@ -4,6 +4,19 @@ ObservationList is an Expo and React Native mobile app for digitising the daily 
 
 The app turns the paper form fields, such as Area, Month, Date, Room No/Area, Observation, and Signature, into digital records. Managers can quickly review open, urgent, completed, and follow-up items across all housekeeping areas.
 
+## Marlay housekeeping areas
+
+The starter data models the eight daily housekeeping areas used across the home:
+
+- Grange 1: ground floor, rooms 1-22
+- Grange 2: ground floor, rooms 23-36
+- Whitechurch 1: first floor, rooms 101-122
+- Whitechurch 2: first floor, rooms 123-146
+- Ticknock: first floor, rooms 147-176
+- Three Rock 1: second floor, rooms 201-222
+- Three Rock 2: second floor, rooms 223-246
+- St. Sab's: second floor, rooms 247-276
+
 ## Architecture
 
 The codebase is split into layers so the app can grow according to SOLID principles:

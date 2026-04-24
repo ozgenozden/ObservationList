@@ -14,6 +14,7 @@ export interface Observation {
   id: string;
   roomNumber: string;
   floor: string;
+  areaId: string;
   area: string;
   reportedAt: Date;
   reportedBy: string;

@@ -6,7 +6,8 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
     id: '1',
     roomNumber: '214',
     floor: '2nd Floor',
-    area: 'East Wing',
+    areaId: 'three-rock-1',
+    area: 'Three Rock 1',
     reportedBy: 'Maria L.',
     signature: 'Maria L.',
     category: 'maintenance',
@@ -22,7 +23,8 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
     id: '2',
     roomNumber: '108',
     floor: '1st Floor',
-    area: 'Memory Care',
+    areaId: 'whitechurch-1',
+    area: 'Whitechurch 1',
     reportedBy: 'John K.',
     signature: 'John K.',
     category: 'deepCleaning',
@@ -36,9 +38,10 @@ const SAMPLE_OBSERVATIONS: Observation[] = [
   },
   {
     id: '3',
-    roomNumber: '305',
-    floor: '3rd Floor',
-    area: 'West Wing',
+    roomNumber: '31',
+    floor: 'Ground Floor',
+    areaId: 'grange-2',
+    area: 'Grange 2',
     reportedBy: 'Aylin S.',
     signature: 'Aylin S.',
     category: 'note',
@@ -56,5 +59,9 @@ export class InMemoryObservationRepository implements ObservationRepository {
   // Keeps starter data local; API or database repositories can implement the same interface later.
   async list(): Promise<Observation[]> {
     return [...SAMPLE_OBSERVATIONS];
+  }
+
+  async listByArea(areaId: string): Promise<Observation[]> {
+    return SAMPLE_OBSERVATIONS.filter((observation) => observation.areaId === areaId);
   }
 }

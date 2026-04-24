@@ -32,7 +32,9 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
       open: 0,
       urgent: 0,
       completed: 0,
+      areas: 0,
     },
+    areaCoverage: [],
     observations: [],
     isLoading: true,
   });
@@ -69,17 +71,35 @@ export function ObservationListScreen({ viewModel }: ObservationListScreenProps)
             <DashboardItem label="Open" value={state.dashboard.open} />
             <DashboardItem label="Urgent" value={state.dashboard.urgent} />
             <DashboardItem label="Done" value={state.dashboard.completed} />
+            <DashboardItem label="Areas" value={state.dashboard.areas} />
           </View>
         </View>
 
         {state.isLoading ? (
           <ActivityIndicator color="#2563eb" size="large" />
         ) : (
-          <View style={styles.list}>
-            {state.observations.map((observation) => (
-              <ObservationCard key={observation.id} observation={observation} />
-            ))}
-          </View>
+          <>
+            <View style={styles.areaSection}>
+              <Text style={styles.sectionTitle}>Area coverage</Text>
+              <View style={styles.areaGrid}>
+                {state.areaCoverage.map((area) => (
+                  <View key={area.id} style={styles.areaCard}>
+                    <Text style={styles.areaName}>{area.name}</Text>
+                    <Text style={styles.areaMeta}>{area.floor}</Text>
+                    <Text style={styles.areaMeta}>
+                      Rooms {area.roomRange} - {area.observationCount} observations
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.list}>
+              {state.observations.map((observation) => (
+                <ObservationCard key={observation.id} observation={observation} />
+              ))}
+            </View>
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -183,6 +203,34 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 26,
     marginBottom: 8,
+  },
+  areaSection: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    color: '#0f172a',
+    fontSize: 18,
+    fontWeight: '800',
+    marginBottom: 12,
+  },
+  areaGrid: {
+    gap: 10,
+  },
+  areaCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 14,
+    padding: 14,
+  },
+  areaName: {
+    color: '#0f172a',
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  areaMeta: {
+    color: '#64748b',
+    fontSize: 13,
+    fontWeight: '700',
+    marginTop: 4,
   },
   list: {
     gap: 16,
